@@ -1,0 +1,1773 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Restu.dev — Portofolio</title>
+<meta name="description" content="Portofolio Restu Nurrokhman." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+/* ============================================================================
+   DAFTAR ISI
+   1.  THEME TOKENS — dark mode permanen (light mode dihapus)
+   2.  RESET & BASE
+   3.  TIPOGRAFI KECIL
+   4.  LAYOUT SECTION
+   5.  TOMBOL & KARTU — feedback tekan umum
+   6.  ANIMASI MASUK — reveal kiri/kanan/bawah
+   7.  HERO
+   8.  HEADER — navbar melengkung + efek LED
+   9. HAMBURGER PANEL
+   10. SECTION BACKGROUND — kartu bio gantung (atas) + slideshow kenangan
+   11. SECTION SKILL
+   12. SECTION PROJECT
+   13. FOOTER — statis (bukan sticky), teks rata tengah
+   14. UTILITAS LAIN
+   ============================================================================ */
+
+:root {
+  --font-display: "Fraunces", "Noto Serif SC", "Noto Serif JP", "Hiragino Mincho ProN", serif;
+  --font-body: "Inter", "Noto Sans SC", "Noto Sans JP", "Hiragino Sans", "Microsoft YaHei", sans-serif;
+  --font-mono: "JetBrains Mono", "Noto Sans SC", "Noto Sans JP", monospace;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --header-h: 60px;
+  --shadow-soft: 0 6px 18px rgba(0, 0, 0, 0.16), 0 2px 6px rgba(0, 0, 0, 0.12);
+
+  --bg-page: #0A0C12;
+  --bg-header: rgba(14, 17, 26, 0.85);
+  --bg-hero: #0A0C16;
+  --bg-background: #3A160E;
+  --bg-skill: #101E33;
+  --bg-project: #0A1F3D;
+  --bg-footer: #0B0C10;
+
+  --bg-card: rgba(255, 255, 255, 0.05);
+  --bg-card-strong: rgba(255, 255, 255, 0.09);
+  --border-soft: rgba(255, 255, 255, 0.12);
+  --text-90: rgba(237, 232, 224, 0.94);
+  --text-55: rgba(237, 232, 224, 0.6);
+  --text-30: rgba(237, 232, 224, 0.34);
+
+  --accent: #2F8CFF;
+  --accent-2: #E14A28;
+  --accent-ink: #05070d;
+  --icon-shadow: var(--shadow-soft);
+  --led: #00f0ff;
+}
+
+
+/* ============================================================================
+   2. RESET & BASE
+   ============================================================================ */
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { margin: 0; min-height: 100%; }
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: var(--bg-page);
+  color: var(--text-90);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+}
+main { flex: 1; }
+
+/* Efek LED di dinding/latar belakang web — dibuat dengan gaya & teknik
+   pergerakan yang SAMA PERSIS dengan LED di logo navbar (lihat
+   .led-wrapper / .led-light di bawah dan referensi yang dilampirkan):
+   dua titik cahaya bulat mengelilingi bingkai lewat teknik masking
+   (hanya tepi yang kelihatan), berjalan berlawanan arah lalu bertemu
+   lagi di tengah. Bedanya cuma skala: di sini bingkainya seluruh
+   halaman (dinding), bukan cuma navbar, jadi durasinya dibuat lebih
+   lambat supaya lajunya terasa wajar untuk jarak yang jauh lebih jauh. */
+.led-wall {
+  position: fixed; inset: 0; z-index: 4;
+  border-radius: 28px;
+  padding: 3px;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0.6;
+  filter: drop-shadow(0 0 8px var(--led)) drop-shadow(0 0 18px rgba(0, 240, 255, 0.45));
+}
+.led-wall-light {
+  position: absolute;
+  width: min(28vw, 260px); height: min(28vw, 260px);
+  background-color: var(--led);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+.led-wall-a { animation: ledWallMoveLeft 16s linear infinite; }
+.led-wall-b { animation: ledWallMoveRight 16s linear infinite; }
+@keyframes ledWallMoveLeft {
+  0%   { top: 0; left: 50%; opacity: 0; }
+  5%   { top: 0; left: 45%; opacity: 1; }
+  30%  { top: 0; left: 0; }
+  70%  { top: 100%; left: 0; }
+  95%  { top: 100%; left: 45%; opacity: 1; }
+  100% { top: 100%; left: 50%; opacity: 0; }
+}
+@keyframes ledWallMoveRight {
+  0%   { top: 0; left: 50%; opacity: 0; }
+  5%   { top: 0; left: 55%; opacity: 1; }
+  30%  { top: 0; left: 100%; }
+  70%  { top: 100%; left: 100%; }
+  95%  { top: 100%; left: 55%; opacity: 1; }
+  100% { top: 100%; left: 50%; opacity: 0; }
+}
+
+img { max-width: 100%; display: block; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; outline-offset: 3px; }
+::selection { background: var(--accent); color: var(--accent-ink); }
+
+
+/* ============================================================================
+   3. TIPOGRAFI KECIL
+   ============================================================================ */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--text-55);
+  display: inline-block;
+}
+
+
+/* ============================================================================
+   4. LAYOUT SECTION
+   ============================================================================ */
+.section-inner { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+@media (min-width: 560px) { .section-inner { padding: 0 32px; } }
+@media (min-width: 900px) { .section-inner { padding: 0 40px; } }
+
+.section { position: relative; padding: clamp(56px, 10vw, 96px) 0; }
+.section h2 {
+  margin: 14px 0 clamp(24px, 5vw, 40px);
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(1.7rem, 5vw, 2.4rem);
+  color: var(--text-90);
+}
+.section-background { background: var(--bg-background); }
+.section-skill { background: var(--bg-skill); }
+.section-project { background: var(--bg-project); }
+
+/* Performa: bagian-bagian di bawah lipatan tidak perlu dihitung layout
+   dan dirender sampai mendekati viewport — mengurangi beban awal saat
+   halaman pertama kali dimuat (khususnya di HP). */
+.section-background, .section-skill, .section-project {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 1200px;
+}
+
+.section::before {
+  content: "";
+  position: absolute;
+  top: -1px; left: 0; right: 0;
+  height: 120px;
+  pointer-events: none;
+  z-index: 0;
+}
+.section-background::before { background: linear-gradient(to bottom, var(--bg-hero), var(--bg-background)); }
+.section-skill::before { background: linear-gradient(to bottom, var(--bg-background), var(--bg-skill)); }
+.section-project::before { background: linear-gradient(to bottom, var(--bg-skill), var(--bg-project)); }
+
+
+/* ============================================================================
+   5. TOMBOL & KARTU — UMUM
+   ============================================================================ */
+.icon-btn, .robot-mascot, .skill-icon, .project-card,
+.hamburger-panel a, .lang-option, .btn-primary, .hero-contact-icon {
+  transition: transform 200ms var(--ease), background-color 300ms var(--ease), color 300ms var(--ease), border-color 300ms var(--ease), box-shadow 400ms var(--ease);
+}
+.icon-btn:active, .robot-mascot:active, .skill-icon:active, .project-card:active,
+.hamburger-panel a:active, .lang-option:active, .btn-primary:active, .hero-contact-icon:active {
+  transform: scale(0.94);
+}
+
+
+/* ============================================================================
+   6. ANIMASI MASUK — reveal kiri / kanan / bawah, tiap elemen sekali saja
+   ============================================================================ */
+.reveal-up, .reveal-left, .reveal-right {
+  opacity: 0;
+  transition: opacity 750ms var(--ease), transform 750ms var(--ease);
+}
+.reveal-up { transform: translateY(28px); }
+.reveal-left { transform: translateX(-36px); }
+.reveal-right { transform: translateX(36px); }
+.reveal-up.is-visible, .reveal-left.is-visible, .reveal-right.is-visible {
+  opacity: 1;
+  transform: translate(0, 0);
+}
+
+
+/* ============================================================================
+   8. HERO
+   ============================================================================ */
+.section-hero {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--bg-hero);
+}
+.starfield { position: absolute; inset: 0; width: 100%; height: 100%; }
+.hero-scrim { position: absolute; inset: 0; background: radial-gradient(ellipse at 30% 50%, rgba(10, 12, 22, 0.35) 0%, rgba(10, 12, 22, 0.75) 70%); }
+
+.hero-grid {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 36px;
+  align-items: center;
+  padding-top: calc(var(--header-h) + 28px);
+  padding-bottom: 40px;
+}
+@media (min-width: 900px) { .hero-grid { grid-template-columns: 1.1fr 0.9fr; gap: 24px; } }
+
+.hero-text { display: flex; flex-direction: column; align-items: flex-start; gap: 14px; }
+.hero-badge {
+  padding: 7px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--border-soft);
+  background: rgba(47, 140, 255, 0.12);
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+}
+.hero-heading {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(2rem, 5.6vw, 3.2rem);
+  line-height: 1.15;
+  color: #EDE8E0;
+  min-height: 1.2em;
+}
+.typed-greeting { display: block; }
+.typed-greeting::after {
+  content: "";
+  display: inline-block;
+  width: 3px; height: 0.85em;
+  margin-left: 4px;
+  background: currentColor;
+  vertical-align: -0.1em;
+  animation: caret-blink 900ms steps(1) infinite;
+}
+@keyframes caret-blink { 50% { opacity: 0; } }
+.grad-text {
+  display: block;
+  background: linear-gradient(100deg, var(--accent) 0%, #8AD8FF 45%, var(--accent-2) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.hero-role { margin: 0; font-size: 1.05rem; color: rgba(237, 232, 224, 0.8); }
+.hero-role strong { color: var(--accent); font-weight: 600; }
+.hero-desc { margin: 0; max-width: 46ch; color: rgba(237, 232, 224, 0.62); line-height: 1.6; }
+.hero-moto { margin: 4px 0 0; max-width: 46ch; font-family: var(--font-display); font-style: italic; font-size: 0.88rem; line-height: 1.55; color: rgba(237, 232, 224, 0.5); }
+
+.hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-top: 8px; }
+.btn-primary { padding: 12px 22px; border-radius: 12px; font-weight: 600; font-size: 0.92rem; background: var(--accent); color: var(--accent-ink); }
+@media (hover: hover) and (pointer: fine) { .btn-primary:hover { transform: translateY(-2px); } }
+
+.hero-contact-icons { display: flex; align-items: center; gap: 10px; }
+.hero-contact-icon {
+  width: 42px; height: 42px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-soft);
+  color: #EDE8E0;
+  font-size: 1.15rem;
+}
+@media (hover: hover) and (pointer: fine) { .hero-contact-icon:hover { border-color: var(--accent); transform: translateY(-2px); } }
+
+.hero-photo-wrap { position: relative; display: flex; justify-content: center; }
+.hero-photo-glow { position: absolute; inset: 8%; background: radial-gradient(circle, var(--accent) 0%, transparent 70%); filter: blur(40px); opacity: 0.5; }
+.hero-photo {
+  position: relative;
+  width: 100%; max-width: 340px;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.section-hero .intro-hint {
+  position: absolute;
+  bottom: 20px; left: 0; right: 0;
+  z-index: 2;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(237, 232, 224, 0.45);
+  animation: hint-bounce 2.2s var(--ease) infinite;
+}
+@keyframes hint-bounce { 0%, 100% { transform: translateY(0); opacity: 0.45; } 50% { transform: translateY(6px); opacity: 0.85; } }
+
+
+/* ============================================================================
+   9. HEADER — navbar melengkung, mengambang, efek LED di tepinya
+   ============================================================================ */
+.site-header {
+  position: fixed;
+  top: 10px; left: 10px; right: 10px;
+  z-index: 60;
+  height: var(--header-h);
+  border-radius: 22px;
+  background: var(--bg-header);
+  border: 1px solid var(--border-soft);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-soft);
+  /* PENTING: dulu "overflow: hidden" di sini memotong/menyembunyikan
+     .lang-menu (dropdown bahasa) yang posisinya jatuh di luar kotak
+     header, sehingga tombol bahasa terlihat "tidak berfungsi" padahal
+     menunya cuma tidak kelihatan. Efek lengkung LED tidak butuh
+     overflow:hidden di sini karena sudah dibatasi sendiri lewat mask. */
+  overflow: visible;
+}
+.header-inner {
+  position: relative;
+  z-index: 2;
+  max-width: 1600px;
+  height: 100%;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0 16px;
+  padding-left: calc(16px + env(safe-area-inset-left, 0px));
+  padding-right: calc(16px + env(safe-area-inset-right, 0px));
+}
+
+/* Efek pendaran LED mengalir di tepi navbar (2 titik cahaya berkeliling) */
+.led-wrapper {
+  position: absolute;
+  inset: 0;
+  border-radius: 22px;
+  padding: 2px;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 1;
+  filter: drop-shadow(0 0 6px var(--led)) drop-shadow(0 0 12px rgba(0, 240, 255, 0.5));
+}
+.led-light {
+  position: absolute;
+  width: 90px; height: 90px;
+  background-color: var(--led);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: ledOrbit 7s linear infinite;
+}
+/* Satu titik cahaya, mengitari seluruh tepi navbar tanpa putus,
+   arah: atas → kiri → bawah → kanan → atas (berputar ke kiri / CCW). */
+@keyframes ledOrbit {
+  0%   { top: 0;    left: 0; }
+  25%  { top: 100%; left: 0; }
+  50%  { top: 100%; left: 100%; }
+  75%  { top: 0;    left: 100%; }
+  100% { top: 0;    left: 0; }
+}
+
+.icon-btn {
+  width: 34px; height: 34px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%;
+  color: var(--text-90);
+  background: var(--bg-card);
+  flex-shrink: 0;
+}
+@media (hover: hover) and (pointer: fine) { .icon-btn:hover { background: var(--bg-card-strong); } }
+
+.hamburger-line { display: block; width: 15px; height: 2px; background: currentColor; margin: 2px 0; transition: transform 400ms var(--ease), opacity 400ms var(--ease); }
+.hamburger-btn-active .hamburger-line:nth-child(1) { transform: translateY(4px) rotate(45deg); }
+.hamburger-btn-active .hamburger-line:nth-child(2) { opacity: 0; }
+.hamburger-btn-active .hamburger-line:nth-child(3) { transform: translateY(-4px) rotate(-45deg); }
+
+/* Tombol hamburger dibuat beda dari icon-btn bulat lainnya: bentuk
+   kotak membulat dengan tekstur logo circuit sebagai latar; garis-garis
+   tetap diberi drop-shadow gelap supaya kontras di atas tekstur. */
+.hamburger-btn {
+  border-radius: 11px;
+  background-image: linear-gradient(rgba(4, 7, 13, 0.6), rgba(4, 7, 13, 0.6)), url("../img/logo-hamburger.png");
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 0 0 1px rgba(0, 240, 255, 0.35), 0 0 10px rgba(0, 240, 255, 0.35);
+}
+.hamburger-btn .hamburger-line { filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.9)); }
+@media (hover: hover) and (pointer: fine) {
+  .hamburger-btn:hover { background-image: linear-gradient(rgba(4, 7, 13, 0.4), rgba(4, 7, 13, 0.4)), url("../img/logo-hamburger.png"); }
+}
+
+.header-title {
+  margin-left: 2px; margin-right: auto;
+  display: flex; align-items: center; gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--text-90);
+  white-space: nowrap;
+}
+.header-bracket { color: var(--led); text-shadow: 0 0 8px rgba(0, 240, 255, 0.6); }
+.header-logo {
+  height: 26px; width: auto;
+  display: block;
+  filter: drop-shadow(0 0 6px rgba(0, 240, 255, 0.5));
+}
+
+.header-actions { display: flex; align-items: center; gap: 4px; }
+.robot-mascot {
+  width: 34px; height: 34px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; border-radius: 50%;
+  background: var(--bg-card);
+  animation: robot-idle 3.4s ease-in-out infinite;
+}
+@media (hover: hover) and (pointer: fine) {
+  .robot-mascot:hover { background: var(--bg-card-strong); animation-play-state: paused; transform: rotate(-8deg) scale(1.1); }
+}
+@keyframes robot-idle { 0%, 100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-3px) rotate(2deg); } }
+
+/* ---- Fitur pencarian (search) --------------------------------------- */
+.search-switcher { position: relative; }
+.search-panel {
+  position: fixed;
+  top: calc(var(--header-h) + 20px);
+  left: 50%;
+  transform: translate(-50%, -10px);
+  width: min(92vw, 440px);
+  max-height: min(70vh, 480px);
+  display: flex;
+  flex-direction: column;
+  border-radius: 18px;
+  background: var(--bg-page);
+  border: 1px solid var(--border-soft);
+  box-shadow: var(--shadow-soft);
+  z-index: 80;
+  opacity: 0;
+  pointer-events: none;
+  overflow: hidden;
+  transition: opacity 250ms var(--ease), transform 250ms var(--ease);
+}
+.search-panel.is-open { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; }
+.search-panel-inner {
+  display: flex; align-items: center; gap: 10px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border-soft);
+  color: var(--text-55);
+  flex-shrink: 0;
+}
+.search-panel-icon { flex-shrink: 0; }
+.search-input {
+  flex: 1;
+  background: none; border: none; outline: none;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--text-90);
+}
+.search-input::placeholder { color: var(--text-30); }
+.search-results { overflow-y: auto; padding: 8px; display: flex; flex-direction: column; gap: 4px; }
+.search-result {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  text-align: left;
+  width: 100%;
+  color: var(--text-90);
+}
+@media (hover: hover) and (pointer: fine) { .search-result:hover { background: var(--bg-card-strong); } }
+.search-result.is-focused { background: var(--bg-card-strong); }
+.search-result-icon { font-size: 1.05rem; flex-shrink: 0; width: 22px; text-align: center; }
+.search-result-text { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.search-result-title { font-size: 0.88rem; font-weight: 600; }
+.search-result-meta { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-30); text-transform: uppercase; letter-spacing: 0.08em; }
+.search-empty { padding: 18px 14px; color: var(--text-30); font-family: var(--font-mono); font-size: 0.72rem; text-align: center; }
+
+.lang-switcher { position: relative; }
+#lang-current-flag { font-size: 0.95rem; }
+.lang-menu {
+  position: absolute;
+  top: calc(100% + 10px); right: 0;
+  min-width: 150px; padding: 6px;
+  border-radius: 14px;
+  background: var(--bg-page);
+  border: 1px solid var(--border-soft);
+  box-shadow: var(--shadow-soft);
+  display: flex; flex-direction: column; gap: 2px;
+  opacity: 0; transform: translateY(-8px) scale(0.96);
+  pointer-events: none;
+  transition: opacity 250ms var(--ease), transform 250ms var(--ease);
+  z-index: 80;
+}
+.lang-menu.is-open { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+.lang-option { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 9px; font-size: 0.85rem; color: var(--text-55); }
+.lang-option span { font-size: 1rem; }
+@media (hover: hover) and (pointer: fine) { .lang-option:hover { background: var(--bg-card-strong); color: var(--text-90); } }
+.lang-option.is-active { color: var(--accent); }
+
+@media (max-width: 480px) {
+  .header-inner { gap: 8px; }
+  .header-title { font-size: 0.66rem; }
+}
+@media (orientation: landscape) and (max-height: 500px) {
+  :root { --header-h: 50px; }
+  .hamburger-panel { padding-top: calc(var(--header-h) + 20px); gap: 6px; }
+  .hamburger-panel a { width: 38px; height: 38px; }
+  .section { padding: 48px 0; }
+}
+
+
+/* ============================================================================
+   10. HAMBURGER PANEL
+   ============================================================================ */
+.panel-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); opacity: 0; pointer-events: none; transition: opacity 400ms var(--ease); z-index: 65; }
+.panel-overlay.is-open { opacity: 1; pointer-events: auto; }
+
+.hamburger-panel {
+  position: fixed; top: 0; left: 0;
+  height: 100vh; height: 100svh; width: auto;
+  display: flex; flex-direction: column; gap: 12px;
+  padding: calc(var(--header-h) + 28px) 12px calc(20px + env(safe-area-inset-bottom, 0px));
+  padding-left: calc(12px + env(safe-area-inset-left, 0px));
+  overflow-y: auto;
+  pointer-events: none;
+  z-index: 70;
+}
+/* PENTING: jangan set pointer-events:auto di kontainer .hamburger-panel
+   itu sendiri — kontainer ini melebar dari atas ke bawah layar (kolom
+   kiri), menutupi lokasi tombol hamburger di header. Kalau kontainernya
+   ikut "auto", ia jadi lapisan tak terlihat yang menangkap klik di atas
+   tombol hamburger sebelum sampai ke overlay/tombolnya (bug: menu tidak
+   bisa ditutup). Solusinya: hanya tautan (a) di dalamnya yang boleh
+   menerima klik; area kosong kontainer tetap tembus klik. */
+.hamburger-panel.is-open a { pointer-events: auto; }
+.hamburger-panel a {
+  display: flex; align-items: center; justify-content: center;
+  width: 46px; height: 46px; border-radius: 16px;
+  background: var(--bg-card); box-shadow: var(--icon-shadow);
+  color: var(--text-55);
+  opacity: 0; transform: translateY(-24px) scale(0.5);
+  transition: background-color 300ms var(--ease), color 300ms var(--ease), opacity 380ms var(--ease), transform 380ms var(--ease);
+}
+.hamburger-panel.is-open a { opacity: 1; transform: translateY(0) scale(1); }
+.hamburger-panel.is-open a:nth-child(1) { transition-delay: 40ms; }
+.hamburger-panel.is-open a:nth-child(2) { transition-delay: 100ms; }
+.hamburger-panel.is-open a:nth-child(3) { transition-delay: 160ms; }
+.hamburger-panel.is-open a:nth-child(4) { transition-delay: 220ms; }
+@media (hover: hover) and (pointer: fine) { .hamburger-panel a:hover { background: var(--bg-card-strong); color: var(--text-90); transform: scale(1.08); } }
+.menu-icon { font-size: 1.2rem; line-height: 1; }
+
+
+/* ============================================================================
+   10. SECTION BACKGROUND — kartu bio (atas) + slideshow kenangan
+   ============================================================================ */
+/* Kartu bio sudah dipindah ke hero section, jadi bg-grid sekarang cuma
+   berisi slideshow kenangan — dibuat satu kolom, ditengahkan, dengan
+   lebar maksimum di layar besar biar tidak melebar berlebihan. */
+.bg-grid { display: grid; grid-template-columns: 1fr; gap: 32px; justify-items: center; }
+
+.memory-slideshow {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 11;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid var(--border-soft);
+}
+@media (min-width: 700px) { .memory-slideshow { max-width: 760px; } }
+.memory-slide {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover;
+  opacity: 0; transform: scale(1.15);
+  transition: opacity 1200ms var(--ease), transform 6000ms linear;
+}
+.memory-slide.is-active { opacity: 1; transform: scale(1.02); }
+.slideshow-dots { position: absolute; bottom: 16px; left: 0; right: 0; display: flex; justify-content: center; gap: 6px; }
+.slideshow-dots span { width: 6px; height: 6px; border-radius: 50%; background: rgba(255, 255, 255, 0.35); transition: background-color 300ms var(--ease), transform 300ms var(--ease); }
+.slideshow-dots span.is-active { background: var(--accent); transform: scale(1.3); }
+
+.bio-card-wrap { display: flex; justify-content: center; }
+.bio-card-stage { position: relative; width: 100%; max-width: 300px; height: 520px; overflow: hidden; opacity: 0; transition: opacity 400ms var(--ease); }
+.bio-card-stage.is-armed { opacity: 1; }
+.lanyard-svg { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 5; pointer-events: none; }
+.lanyard-strap { fill: none; stroke: var(--accent); stroke-width: 5; stroke-linecap: round; opacity: 0.85; }
+.bio-drag-wrapper { position: absolute; top: 0; left: 0; display: flex; flex-direction: column; align-items: center; z-index: 6; cursor: grab; touch-action: none; transform-origin: top center; will-change: transform; }
+.bio-drag-wrapper:active { cursor: grabbing; }
+.bio-clip { width: 20px; height: 28px; background: linear-gradient(135deg, #e6e6e6 0%, #8a8a8a 50%, #ffffff 100%); border-radius: 5px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.35); position: relative; margin-bottom: -8px; z-index: 2; }
+.bio-clip-ring { width: 13px; height: 13px; border: 3px solid #aaa; border-radius: 50%; position: absolute; bottom: -7px; left: 50%; transform: translateX(-50%); }
+.bio-holder-sleeve { width: 220px; height: 340px; background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(4px); border: 2px solid var(--border-soft); border-radius: 16px; padding: 10px; box-shadow: var(--icon-shadow), inset 0 0 15px rgba(255, 255, 255, 0.06); position: relative; }
+.bio-holder-hole { width: 38px; height: 7px; background: rgba(0, 0, 0, 0.3); border-radius: 10px; margin: 0 auto 8px auto; }
+.bio-card-3d { width: 100%; height: calc(100% - 15px); position: relative; transform-style: preserve-3d; transition: transform 700ms var(--ease); }
+.bio-card-3d.is-flipped { transform: rotateY(180deg); }
+.bio-card-face { position: absolute; inset: 0; backface-visibility: hidden; border-radius: 12px; overflow: hidden; background: var(--bg-card-strong); border: 1px solid var(--border-soft); box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); display: flex; flex-direction: column; justify-content: flex-end; align-items: center; padding: 12px; }
+.bio-card-back { transform: rotateY(180deg); justify-content: center; padding: 20px; }
+.bio-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
+.bio-photo-scrim { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.05) 45%, transparent 70%); z-index: 1; }
+.bio-name-tag { position: relative; z-index: 2; background: rgba(255, 255, 255, 0.95); color: #111; width: 92%; padding: 8px 6px; border-radius: 14px; text-align: center; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); }
+.bio-name-tag h3 { margin: 0; font-family: var(--font-display); font-size: 0.95rem; font-weight: 600; color: #14161c; }
+.bio-hint { position: relative; z-index: 2; margin-top: 8px; color: #EDE8E0; font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.16em; text-transform: uppercase; opacity: 0.85; }
+.bio-list { margin: 0; width: 100%; display: flex; flex-direction: column; gap: 12px; }
+.bio-list div { display: flex; flex-direction: column; gap: 2px; border-bottom: 1px solid var(--border-soft); padding-bottom: 8px; }
+.bio-list dt { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-30); margin: 0; }
+.bio-list dd { margin: 0; font-size: 0.9rem; color: var(--text-90); }
+
+
+/* ============================================================================
+   11. SECTION SKILL
+   ============================================================================ */
+.skill-subhead { margin: 0 0 16px; font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-30); }
+.skill-subhead-spaced { margin-top: 44px; }
+.skill-group-label { margin: 0 0 12px; font-size: 0.8rem; font-weight: 600; color: var(--text-55); }
+.skill-group-spaced { margin-top: 28px; }
+
+.skill-icon-row { display: flex; gap: 12px; margin-bottom: 8px; flex-wrap: wrap; }
+.skill-icon { display: flex; align-items: center; gap: 8px; padding: 8px 14px 8px 8px; border-radius: 999px; border: 1px solid var(--border-soft); background: var(--bg-card); font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-55); }
+.skill-icon:active, .skill-icon.is-pressed { transform: scale(1.22); color: var(--text-90); border-color: var(--accent); z-index: 2; }
+@media (hover: hover) and (pointer: fine) { .skill-icon:hover { transform: scale(1.1); color: var(--text-90); border-color: var(--accent); } }
+.skill-icon.is-active { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.skill-icon-logo { width: 22px; height: 22px; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); font-weight: 700; font-size: 0.62rem; color: #fff; flex-shrink: 0; }
+
+.skill-marquee-wrap { overflow: hidden; border-radius: 18px; position: relative; padding: 32px 0 24px; }
+.skill-marquee { display: flex; }
+.skill-track { display: flex; gap: 20px; padding: 4px; will-change: transform; }
+.skill-track.is-centering { transition: transform 600ms var(--ease); }
+.skill-card { width: 220px; flex-shrink: 0; padding: 20px; border-radius: 16px; border: 1px solid var(--border-soft); background: var(--bg-card); cursor: pointer; transform: rotate(-3deg); transition: border-color 300ms var(--ease), transform 300ms var(--ease); }
+.skill-card.is-highlighted { border-color: var(--accent); transform: rotate(0deg) translateY(-6px) scale(1.03); }
+.skill-card h3 { margin: 0 0 12px; font-family: var(--font-display); font-weight: 500; font-size: 1.15rem; }
+.skill-progress-track { height: 4px; border-radius: 4px; background: var(--bg-card-strong); overflow: hidden; margin-bottom: 6px; }
+.skill-progress-fill { height: 100%; background: var(--accent); border-radius: 4px; }
+.skill-progress-label { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-30); margin-bottom: 14px; display: block; }
+.skill-chart { width: 100%; height: 56px; display: block; overflow: visible; }
+.skill-hint { margin-top: 20px; font-family: var(--font-mono); font-size: 0.68rem; color: var(--text-30); }
+
+.lang-skill-grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
+@media (min-width: 700px) { .lang-skill-grid { grid-template-columns: repeat(3, 1fr); } }
+.lang-skill-card { padding: 18px; border-radius: 14px; border: 1px solid var(--border-soft); background: var(--bg-card); }
+.lang-skill-top { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.lang-skill-flag { font-size: 1.3rem; }
+.lang-skill-name { font-weight: 600; font-size: 0.95rem; }
+.lang-skill-level { font-family: var(--font-mono); font-size: 0.62rem; color: var(--text-30); }
+
+.cert-list, .field-chip-row { display: flex; flex-direction: column; gap: 10px; }
+.field-chip-row { flex-direction: row; flex-wrap: wrap; }
+.cert-item { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-radius: 12px; border: 1px solid var(--border-soft); background: var(--bg-card); }
+.cert-icon { font-size: 1.2rem; }
+.cert-name { font-weight: 600; font-size: 0.9rem; }
+.cert-issuer { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-30); }
+.field-chip { padding: 9px 16px; border-radius: 999px; border: 1px solid var(--border-soft); background: var(--bg-card); font-size: 0.82rem; color: var(--text-55); }
+.empty-state { padding: 18px 16px; border-radius: 12px; border: 1px dashed var(--border-soft); color: var(--text-30); font-family: var(--font-mono); font-size: 0.72rem; }
+
+
+/* ============================================================================
+   12. SECTION PROJECT
+   ============================================================================ */
+.project-grid { display: grid; grid-template-columns: 1fr; gap: 24px; }
+@media (min-width: 700px) { .project-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1100px) { .project-grid { grid-template-columns: repeat(3, 1fr); } }
+.project-card { padding: 26px; border-radius: 16px; border: 1px solid var(--border-soft); background: var(--bg-card); display: flex; flex-direction: column; gap: 12px; }
+@media (hover: hover) and (pointer: fine) { .project-card:hover { transform: translateY(-6px); border-color: var(--accent); } }
+.project-card h3 { margin: 0; font-family: var(--font-display); font-weight: 500; font-size: 1.25rem; }
+.project-card p { margin: 0; color: var(--text-55); font-size: 0.9rem; line-height: 1.6; flex: 1; }
+.project-card a { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); border-bottom: 1px solid var(--accent); width: fit-content; padding-bottom: 2px; }
+
+
+/* ============================================================================
+   13. FOOTER — statis (bukan sticky), teks rata tengah
+   ============================================================================ */
+.site-footer {
+  position: static;
+  background: var(--bg-footer);
+  border-top: 1px solid var(--border-soft);
+  padding: 16px 24px calc(16px + env(safe-area-inset-bottom, 0px));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 4px;
+}
+.footer-wordmark { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.24em; color: var(--text-55); }
+.footer-note { font-family: var(--font-mono); font-size: 0.62rem; color: var(--text-30); }
+
+
+/* ============================================================================
+   14. UTILITAS LAIN
+   ============================================================================ */
+/* Performa: saat tab tidak terlihat (pindah tab/minimize), hentikan
+   animasi CSS dekoratif yang jalan terus-menerus (LED, mascot, dst.)
+   supaya tidak membebani CPU/baterai secara percuma di belakang layar.
+   Kelas .tab-hidden ditambah/dihapus lewat main.js. */
+body.tab-hidden .led-wall-light,
+body.tab-hidden .led-light,
+body.tab-hidden .robot-mascot,
+body.tab-hidden .intro-hint {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+  .reveal-up, .reveal-left, .reveal-right { opacity: 1; transform: none; }
+}
+
+</style>
+<link rel="icon" type="image/png" href="assets/img/logo-web.png" />
+</head>
+<body>
+
+<!-- ================= HEADER ================= -->
+<header id="site-header" class="site-header">
+  <div class="led-wrapper">
+    <div class="led-light"></div>
+  </div>
+  <div class="header-inner">
+    <button id="hamburger-btn" class="icon-btn hamburger-btn" aria-label="Buka/tutup menu" aria-expanded="false">
+      <span class="hamburger-line"></span>
+      <span class="hamburger-line"></span>
+      <span class="hamburger-line"></span>
+    </button>
+
+    <a href="#top" class="header-title"><img class="header-logo" src="assets/img/logo-web.png" alt="Restu.dev" /> Restu.dev</a>
+
+    <div class="header-actions">
+      <div class="search-switcher">
+        <button id="search-toggle" class="icon-btn" aria-label="Cari / Search" aria-expanded="false" aria-haspopup="true">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="7"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </button>
+      </div>
+      <div class="lang-switcher">
+        <button id="lang-toggle" class="icon-btn" aria-label="Pilih bahasa / Language" aria-expanded="false" aria-haspopup="true">
+          <span id="lang-current-flag">🇮🇩</span>
+        </button>
+        <div id="lang-menu" class="lang-menu" role="menu" aria-hidden="true">
+          <button type="button" class="lang-option" data-lang="id"><span>🇮🇩</span> Indonesia</button>
+          <button type="button" class="lang-option" data-lang="en"><span>🇬🇧</span> English</button>
+          <button type="button" class="lang-option" data-lang="ja"><span>🇯🇵</span> 日本語</button>
+          <button type="button" class="lang-option" data-lang="zh"><span>🇨🇳</span> 中文</button>
+        </div>
+      </div>
+      <button id="robot-mascot" class="robot-mascot" aria-label="Halo!">🤖</button>
+    </div>
+  </div>
+</header>
+
+<!-- ================= PANEL PENCARIAN ================= -->
+<div id="search-overlay" class="panel-overlay"></div>
+<div id="search-panel" class="search-panel" aria-hidden="true">
+  <div class="search-panel-inner">
+    <svg class="search-panel-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <circle cx="11" cy="11" r="7"></circle>
+      <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+    </svg>
+    <input id="search-input" class="search-input" type="text" autocomplete="off" data-i18n-placeholder="searchPlaceholder" placeholder="Cari section, skill, atau project…" />
+  </div>
+  <div id="search-results" class="search-results"></div>
+</div>
+
+<!-- ================= HAMBURGER PANEL ================= -->
+<div id="panel-overlay" class="panel-overlay"></div>
+<nav id="hamburger-panel" class="hamburger-panel" aria-hidden="true">
+  <a href="#top" data-close-panel data-i18n-title="navHero" title="Beranda"><span class="menu-icon">🏠</span></a>
+  <a href="#background" data-close-panel data-i18n-title="eyebrowBackground" title="Latar"><span class="menu-icon">🖼️</span></a>
+  <a href="#skill" data-close-panel data-i18n-title="eyebrowSkill" title="Skill"><span class="menu-icon">🛠️</span></a>
+  <a href="#project" data-close-panel data-i18n-title="eyebrowProject" title="Project"><span class="menu-icon">🚀</span></a>
+</nav>
+
+<main id="top">
+
+  <!-- ================= HERO — Selamat Datang ================= -->
+  <section id="hero" class="section-hero">
+    <canvas id="starfield" class="starfield" aria-hidden="true"></canvas>
+    <div class="hero-scrim"></div>
+
+    <div class="section-inner hero-grid hero-content reveal-up" id="heroContent">
+      <div class="hero-text">
+        <span class="hero-badge" data-i18n="heroBadge">Terbuka untuk Kolaborasi</span>
+        <h1 class="hero-heading">
+          <span id="typedGreeting" class="typed-greeting"></span>
+          <span class="grad-text">Restu Nurrokhman</span>
+        </h1>
+        <p class="hero-role"><span data-i18n="heroRolePrefix">Saya seorang</span> <strong data-i18n="heroRole">Pelajar IT</strong></p>
+        <p class="hero-desc" data-i18n="heroDesc">Belajar membangun web modern, dari tampilan sampai logikanya.</p>
+        <p class="hero-moto" data-i18n="motoQuote">
+          “Diam bukan perilaku yang buruk, tapi sedang mencari kesempatan
+          untuk kesuksesan, seperti sedang mengasah pedang sampai tidak
+          sadar membelah lautan.”
+        </p>
+        <div class="hero-actions">
+          <a href="#project" class="btn-primary" data-i18n="heroBtnProject">Lihat Project →</a>
+          <div class="hero-contact-icons" id="heroContactIcons"></div>
+        </div>
+      </div>
+      <div class="hero-photo-wrap">
+        <div class="bio-card-stage" id="bioCardStage">
+          <svg class="lanyard-svg"><path id="bioStrapPath" class="lanyard-strap" d="M 0 0 C 0 0, 0 0, 0 0" /></svg>
+          <div class="bio-drag-wrapper" id="bioDragWrapper">
+            <div class="bio-clip"><div class="bio-clip-ring"></div></div>
+            <div class="bio-holder-sleeve">
+              <div class="bio-holder-hole"></div>
+              <div class="bio-card-3d" id="bioCard3d">
+                <div class="bio-card-face bio-card-front">
+                  <img class="bio-photo" src="assets/img/profile.jpg" alt="Restu Nurrokhman" />
+                  <div class="bio-photo-scrim"></div>
+                  <div class="bio-name-tag"><h3>Restu Nurrokhman</h3></div>
+                  <span class="bio-hint" data-i18n="bioHint">Tarik / klik kartunya</span>
+                </div>
+                <div class="bio-card-face bio-card-back">
+                  <dl class="bio-list">
+                    <div><dt data-i18n="bioNama">Nama</dt><dd>Restu Nurrokhman</dd></div>
+                    <div><dt data-i18n="bioUmur">Umur</dt><dd>18 <span data-i18n="bioTahun">tahun</span></dd></div>
+                    <div><dt data-i18n="bioStatus">Status</dt><dd data-i18n="bioStatusValue">Pelajar</dd></div>
+                    <div><dt data-i18n="bioTujuan">Tujuan</dt><dd>IT</dd></div>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="intro-hint" id="intro-hint" data-i18n="scrollHint">Scroll untuk melihat lebih ↓</div>
+  </section>
+
+  <!-- ================= BACKGROUND — kartu bio (paling atas) + kenangan ================= -->
+  <section id="background" class="section section-background">
+    <div class="section-inner">
+      <span class="eyebrow reveal-left" data-i18n="eyebrowBackground">Latar</span>
+      <h2 class="reveal-left" data-i18n="headingBackground">Jejak &amp; cerita</h2>
+
+      <div class="bg-grid">
+        <div class="memory-slideshow reveal-up" id="memory-slideshow">
+          <img src="assets/img/memories/memory-01.jpg" class="memory-slide is-active" alt="Momen 1" loading="eager" decoding="async" />
+          <img src="assets/img/memories/memory-02.jpg" class="memory-slide" alt="Momen 2" loading="lazy" decoding="async" />
+          <img src="assets/img/memories/memory-03.jpg" class="memory-slide" alt="Momen 3" loading="lazy" decoding="async" />
+          <img src="assets/img/memories/memory-04.jpg" class="memory-slide" alt="Momen 4" loading="lazy" decoding="async" />
+          <img src="assets/img/memories/memory-05.jpg" class="memory-slide" alt="Momen 5" loading="lazy" decoding="async" />
+          <img src="assets/img/memories/memory-06.jpg" class="memory-slide" alt="Momen 6" loading="lazy" decoding="async" />
+          <img src="assets/img/memories/memory-07.jpg" class="memory-slide" alt="Momen 7" loading="lazy" decoding="async" />
+          <div class="slideshow-dots" id="slideshow-dots"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SKILL ================= -->
+  <section id="skill" class="section section-skill">
+    <div class="section-inner">
+      <span class="eyebrow reveal-left" data-i18n="eyebrowSkill">Kemampuan</span>
+      <h2 class="reveal-left" data-i18n="headingSkill">Skill</h2>
+
+      <h3 class="skill-subhead" data-i18n="subheadProgramming">Bahasa Pemrograman</h3>
+
+      <h4 class="skill-group-label" data-i18n="groupFrontend">Frontend Development</h4>
+      <div class="skill-icon-row" id="skill-icon-row-frontend"></div>
+
+      <h4 class="skill-group-label skill-group-spaced" data-i18n="groupBackend">Backend &amp; Languages</h4>
+      <div class="skill-icon-row" id="skill-icon-row-backend"></div>
+
+      <div class="skill-marquee-wrap" id="skill-marquee-wrap">
+        <div class="skill-marquee" id="skill-marquee">
+          <div class="skill-track" id="skill-track"></div>
+        </div>
+      </div>
+      <p class="skill-hint" data-i18n="skillHint">Klik salah satu ikon atau kartu untuk menyorotnya di tengah.</p>
+
+      <h3 class="skill-subhead skill-subhead-spaced" data-i18n="subheadLanguage">Bahasa</h3>
+      <div class="lang-skill-grid" id="langSkillGrid"></div>
+
+      <h3 class="skill-subhead skill-subhead-spaced" data-i18n="subheadCert">Sertifikat Bahasa</h3>
+      <div class="cert-list" id="certList"></div>
+
+      <h3 class="skill-subhead skill-subhead-spaced" data-i18n="subheadField">Job / Bidang</h3>
+      <div class="field-chip-row" id="fieldChipRow"></div>
+    </div>
+  </section>
+
+  <!-- ================= PROJECT ================= -->
+  <section id="project" class="section section-project">
+    <div class="section-inner">
+      <span class="eyebrow reveal-left" data-i18n="eyebrowProject">Hasil karya</span>
+      <h2 class="reveal-left" data-i18n="headingProject">Project</h2>
+      <div class="project-grid" id="project-grid"></div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <span class="footer-wordmark">RESTU.DEV</span>
+  <span class="footer-note" data-i18n="footerNote">© 2026 Restu Nurrokhman — dibangun dengan HTML, CSS &amp; JS.</span>
+</footer>
+
+<!-- ================= LED DINDING — gaya & pergerakan sama persis dengan LED navbar ================= -->
+<div class="led-wall" aria-hidden="true">
+  <div class="led-wall-light led-wall-a"></div>
+  <div class="led-wall-light led-wall-b"></div>
+</div>
+
+<script>
+/* ============================================================================
+   DAFTAR ISI
+   0.  DATA           — SKILLS, LANGUAGES, CERTS, FIELDS, CONTACTS
+   1.  BAHASA (i18n)
+   2.  MASKOT ROBOT
+   3.  HERO — teks mengetik & starfield
+   4.  HEADER (scroll shadow)
+   5.  PENCARIAN
+   6.  MENU HAMBURGER
+   7.  SLIDESHOW KENANGAN
+   8.  KARTU BIO GANTUNG (fisika lanyard)
+   9. MARQUEE SKILL — dikelompokkan Frontend / Backend
+   10. RENDER PROJECT, BAHASA, SERTIFIKAT, BIDANG, IKON KONTAK HERO
+   11. REVEAL ON SCROLL
+   ============================================================================ */
+(function () {
+  "use strict";
+
+  /* ==========================================================================
+     0. DATA
+     ========================================================================== */
+  var SKILLS = [
+    { key: "html", name: "HTML", level: 30, trend: [5, 12, 20, 30], category: "frontend", badge: { bg: "#E34F26", fg: "#fff", label: "5" } },
+    { key: "css", name: "CSS", level: 30, trend: [5, 12, 20, 30], category: "frontend", badge: { bg: "#2965F1", fg: "#fff", label: "3" } },
+    { key: "js", name: "JavaScript", level: 10, trend: [2, 4, 7, 10], category: "frontend", badge: { bg: "#F0DB4F", fg: "#1a1a1a", label: "JS" } },
+    { key: "ts", name: "TypeScript", level: 0, trend: [0, 0, 0, 0], category: "frontend", badge: { bg: "#3178C6", fg: "#fff", label: "TS" } },
+    { key: "py", name: "Python", level: 0, trend: [0, 0, 0, 0], category: "backend", badge: { bg: "#3776AB", fg: "#fff", label: "Py" } },
+    { key: "java", name: "Java", level: 0, trend: [0, 0, 0, 0], category: "backend", badge: { bg: "#ED8B00", fg: "#fff", label: "J" } },
+    { key: "c", name: "C", level: 0, trend: [0, 0, 0, 0], category: "backend", badge: { bg: "#A8B9CC", fg: "#1a1a1a", label: "C" } },
+    { key: "cpp", name: "C++", level: 0, trend: [0, 0, 0, 0], category: "backend", badge: { bg: "#00599C", fg: "#fff", label: "C++" } },
+    { key: "csharp", name: "C#", level: 0, trend: [0, 0, 0, 0], category: "backend", badge: { bg: "#68217A", fg: "#fff", label: "C#" } },
+    { key: "php", name: "PHP", level: 0, trend: [0, 0, 0, 0], category: "backend", badge: { bg: "#777BB4", fg: "#fff", label: "php" } },
+    { key: "ruby", name: "Ruby", level: 0, trend: [0, 0, 0, 0], category: "backend", badge: { bg: "#CC342D", fg: "#fff", label: "Rb" } },
+    { key: "go", name: "Go", level: 0, trend: [0, 0, 0, 0], category: "backend", badge: { bg: "#00ADD8", fg: "#fff", label: "Go" } },
+    { key: "rust", name: "Rust", level: 0, trend: [0, 0, 0, 0], category: "backend", badge: { bg: "#DEA584", fg: "#1a1a1a", label: "Rs" } },
+    { key: "swift", name: "Swift", level: 0, trend: [0, 0, 0, 0], category: "backend", badge: { bg: "#FA7343", fg: "#fff", label: "Sw" } },
+    { key: "kotlin", name: "Kotlin", level: 0, trend: [0, 0, 0, 0], category: "backend", badge: { bg: "#7F52FF", fg: "#fff", label: "K" } },
+    { key: "dart", name: "Dart", level: 0, trend: [0, 0, 0, 0], category: "backend", badge: { bg: "#0175C2", fg: "#fff", label: "Dt" } },
+    { key: "sql", name: "SQL", level: 0, trend: [0, 0, 0, 0], category: "backend", badge: { bg: "#4479A1", fg: "#fff", label: "DB" } },
+  ];
+
+  var LANGUAGES = [
+    { flag: "🇮🇩", name: "Indonesia", levelPercent: 100, levelLabel: null },
+    { flag: "🇬🇧", name: "English", levelPercent: 20, levelLabel: null },
+    { flag: "🇯🇵", name: "日本語 (Jepang)", levelPercent: 40, levelLabel: "N4" },
+  ];
+
+  var CERTS = [];
+  var FIELDS = [];
+
+  var CONTACTS = [
+    { icon: "💬", label: "WhatsApp", href: "https://wa.me/6287817567212" },
+    { icon: "📸", label: "Instagram", href: "https://www.instagram.com/restunurrokhman?igsh=MTZmaGh6dDdvOTlnaA==" },
+    { icon: "✉️", label: "Email", href: "mailto:restunurrohman57@gmail.com" },
+  ];
+
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* Performa: tandai body saat tab disembunyikan supaya animasi CSS
+     dekoratif berhenti (lihat style.css), dan rAF loop lain (starfield,
+     marquee) bisa mengecek document.hidden untuk skip kerja berat. */
+  document.addEventListener("visibilitychange", function () {
+    document.body.classList.toggle("tab-hidden", document.hidden);
+  });
+
+  /* ==========================================================================
+     1. BAHASA (i18n)
+     ========================================================================== */
+  var TRANSLATIONS = {
+    id: {
+      flag: "🇮🇩", scrollHint: "Scroll untuk melihat lebih ↓", navHero: "Beranda",
+      heroBadge: "Terbuka untuk Kolaborasi", heroRolePrefix: "Saya seorang", heroRole: "Pelajar IT",
+      heroDesc: "Belajar membangun web modern, dari tampilan sampai logikanya.",
+      heroBtnProject: "Lihat Project →",
+      motoQuote: "“Diam bukan perilaku yang buruk, tapi sedang mencari kesempatan untuk kesuksesan, seperti sedang mengasah pedang sampai tidak sadar membelah lautan.”",
+      eyebrowBackground: "Latar", headingBackground: "Jejak & cerita",
+      bioHint: "Tarik / klik kartunya", bioNama: "Nama", bioUmur: "Umur", bioTahun: "tahun",
+      bioStatus: "Status", bioStatusValue: "Pelajar", bioTujuan: "Tujuan",
+      eyebrowSkill: "Kemampuan", headingSkill: "Skill",
+      subheadProgramming: "Bahasa Pemrograman", groupFrontend: "Frontend Development", groupBackend: "Backend & Languages",
+      subheadLanguage: "Bahasa", subheadCert: "Sertifikat Bahasa", subheadField: "Job / Bidang",
+      certEmpty: "Belum ada sertifikat.", fieldEmpty: "Belum ditentukan.",
+      skillHint: "Klik salah satu ikon atau kartu untuk menyorotnya di tengah.", skillLevelLabel: "Tingkatan",
+      eyebrowProject: "Hasil karya", headingProject: "Project",
+      footerNote: "© 2026 Restu Nurrokhman — dibangun dengan HTML, CSS &amp; JS.",
+      projectLinkLabel: "Lihat project →",
+      projects: [{ title: "Project v1", desc: "Salah satu project yang sudah aku deploy — lihat langsung hasilnya.", link: "https://exquisite-boba-89cc42.netlify.app/" }],
+      searchPlaceholder: "Cari section, skill, atau project…",
+      searchEmpty: "Tidak ada hasil.",
+      searchCatSection: "Bagian", searchCatSkill: "Skill", searchCatLang: "Bahasa", searchCatProject: "Project",
+    },
+    en: {
+      flag: "🇬🇧", scrollHint: "Scroll to see more ↓", navHero: "Home",
+      heroBadge: "Open for Collaboration", heroRolePrefix: "I'm a", heroRole: "IT Student",
+      heroDesc: "Learning to build modern web apps, from the interface down to the logic.",
+      heroBtnProject: "View Projects →",
+      motoQuote: "“Silence isn't a bad habit — it's a search for the opportunity to succeed, like sharpening a sword without noticing it has already parted the sea.”",
+      eyebrowBackground: "Background", headingBackground: "Journey & story",
+      bioHint: "Drag / click the card", bioNama: "Name", bioUmur: "Age", bioTahun: "years old",
+      bioStatus: "Status", bioStatusValue: "Student", bioTujuan: "Goal",
+      eyebrowSkill: "Skills", headingSkill: "Skills",
+      subheadProgramming: "Programming Languages", groupFrontend: "Frontend Development", groupBackend: "Backend & Languages",
+      subheadLanguage: "Languages", subheadCert: "Language Certificates", subheadField: "Job / Field",
+      certEmpty: "No certificates yet.", fieldEmpty: "Not decided yet.",
+      skillHint: "Click an icon or card to bring it to the center.", skillLevelLabel: "Level",
+      eyebrowProject: "Work", headingProject: "Projects",
+      footerNote: "© 2026 Restu Nurrokhman — built with HTML, CSS &amp; JS.",
+      projectLinkLabel: "View project →",
+      projects: [{ title: "Project v1", desc: "One of the projects I've already deployed — check it out live.", link: "https://exquisite-boba-89cc42.netlify.app/" }],
+      searchPlaceholder: "Search sections, skills, or projects…",
+      searchEmpty: "No results.",
+      searchCatSection: "Section", searchCatSkill: "Skill", searchCatLang: "Language", searchCatProject: "Project",
+    },
+    ja: {
+      flag: "🇯🇵", scrollHint: "スクロールして見る ↓", navHero: "ホーム",
+      heroBadge: "コラボレーション募集中", heroRolePrefix: "職業:", heroRole: "IT学生",
+      heroDesc: "見た目からロジックまで、モダンなWebアプリの作り方を学んでいます。",
+      heroBtnProject: "プロジェクトを見る →",
+      motoQuote: "「沈黙は悪い態度ではなく、成功の機会を探しているだけ。まるで剣を研ぎ続けるうちに、気づかぬまま海を切り開くように。」",
+      eyebrowBackground: "背景", headingBackground: "軌跡と物語",
+      bioHint: "カードをドラッグ／クリック", bioNama: "名前", bioUmur: "年齢", bioTahun: "歳",
+      bioStatus: "ステータス", bioStatusValue: "学生", bioTujuan: "目標",
+      eyebrowSkill: "スキル", headingSkill: "スキル",
+      subheadProgramming: "プログラミング言語", groupFrontend: "フロントエンド開発", groupBackend: "バックエンド＆言語",
+      subheadLanguage: "言語", subheadCert: "語学認定資格", subheadField: "職種 / 分野",
+      certEmpty: "まだ資格はありません。", fieldEmpty: "まだ未定です。",
+      skillHint: "アイコンまたはカードをクリックすると中央に表示されます。", skillLevelLabel: "レベル",
+      eyebrowProject: "実績", headingProject: "プロジェクト",
+      footerNote: "© 2026 Restu Nurrokhman — HTML、CSS、JSで制作。",
+      projectLinkLabel: "プロジェクトを見る →",
+      projects: [{ title: "プロジェクト v1", desc: "すでに公開しているプロジェクトのひとつです。実際に見てみてください。", link: "https://exquisite-boba-89cc42.netlify.app/" }],
+      searchPlaceholder: "セクション、スキル、プロジェクトを検索…",
+      searchEmpty: "結果がありません。",
+      searchCatSection: "セクション", searchCatSkill: "スキル", searchCatLang: "言語", searchCatProject: "プロジェクト",
+    },
+    zh: {
+      flag: "🇨🇳", scrollHint: "向下滚动查看更多 ↓", navHero: "首页",
+      heroBadge: "欢迎合作", heroRolePrefix: "我是一名", heroRole: "IT专业学生",
+      heroDesc: "正在学习构建现代网页应用，从界面到逻辑。",
+      heroBtnProject: "查看项目 →",
+      motoQuote: "「沉默不是坏习惯,而是在寻找成功的机会,就像不断磨剑,不知不觉间劈开了大海。」",
+      eyebrowBackground: "背景", headingBackground: "足迹与故事",
+      bioHint: "拖动／点击卡片", bioNama: "姓名", bioUmur: "年龄", bioTahun: "岁",
+      bioStatus: "状态", bioStatusValue: "学生", bioTujuan: "目标",
+      eyebrowSkill: "技能", headingSkill: "技能",
+      subheadProgramming: "编程语言", groupFrontend: "前端开发", groupBackend: "后端与语言",
+      subheadLanguage: "语言", subheadCert: "语言证书", subheadField: "职业 / 领域",
+      certEmpty: "暂无证书。", fieldEmpty: "尚未确定。",
+      skillHint: "点击图标或卡片可将其居中显示。", skillLevelLabel: "级别",
+      eyebrowProject: "作品", headingProject: "项目",
+      footerNote: "© 2026 Restu Nurrokhman — 使用 HTML、CSS 和 JS 构建。",
+      projectLinkLabel: "查看项目 →",
+      projects: [{ title: "项目 v1", desc: "我已经部署的项目之一 — 点击查看实际效果。", link: "https://exquisite-boba-89cc42.netlify.app/" }],
+      searchPlaceholder: "搜索版块、技能或项目…",
+      searchEmpty: "没有结果。",
+      searchCatSection: "版块", searchCatSkill: "技能", searchCatLang: "语言", searchCatProject: "项目",
+    },
+  };
+
+  var currentLang = "id";
+
+  function applyLanguage(lang) {
+    var t = TRANSLATIONS[lang];
+    if (!t) return;
+    currentLang = lang;
+    document.documentElement.setAttribute("lang", lang);
+
+    document.querySelectorAll("[data-i18n]").forEach(function (el) {
+      var key = el.getAttribute("data-i18n");
+      if (t[key] != null) el.innerHTML = t[key];
+    });
+    document.querySelectorAll("[data-i18n-title]").forEach(function (el) {
+      var key = el.getAttribute("data-i18n-title");
+      if (t[key] != null) el.setAttribute("title", t[key]);
+    });
+    var flagEl = document.getElementById("lang-current-flag");
+    if (flagEl) flagEl.textContent = t.flag;
+    document.querySelectorAll(".lang-option").forEach(function (btn) {
+      btn.classList.toggle("is-active", btn.dataset.lang === lang);
+    });
+    document.querySelectorAll(".skill-progress-label").forEach(function (el) {
+      el.textContent = t.skillLevelLabel + " — " + el.dataset.level + "%";
+    });
+
+    renderProjects(t.projects, t.projectLinkLabel);
+    renderCerts(t.certEmpty);
+    renderFields(t.fieldEmpty);
+
+    var searchInputEl = document.getElementById("search-input");
+    if (searchInputEl && t.searchPlaceholder) searchInputEl.setAttribute("placeholder", t.searchPlaceholder);
+    if (typeof rebuildSearchIndex === "function") rebuildSearchIndex();
+
+    try { localStorage.setItem("portfolio-lang", lang); } catch (e) {}
+  }
+
+  var langToggleBtn = document.getElementById("lang-toggle");
+  var langMenu = document.getElementById("lang-menu");
+  function setLangMenuOpen(open) {
+    langMenu.classList.toggle("is-open", open);
+    langMenu.setAttribute("aria-hidden", open ? "false" : "true");
+    langToggleBtn.setAttribute("aria-expanded", open ? "true" : "false");
+  }
+  langToggleBtn.addEventListener("click", function () { setLangMenuOpen(!langMenu.classList.contains("is-open")); });
+  langMenu.querySelectorAll(".lang-option").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      applyLanguage(btn.dataset.lang);
+      setLangMenuOpen(false);
+    });
+  });
+  document.addEventListener("click", function (e) {
+    if (!e.target.closest(".lang-switcher")) setLangMenuOpen(false);
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") setLangMenuOpen(false);
+  });
+
+  function initLanguage() {
+    var saved = null;
+    try { saved = localStorage.getItem("portfolio-lang"); } catch (e) {}
+    applyLanguage(saved && TRANSLATIONS[saved] ? saved : "id");
+  }
+
+  /* ==========================================================================
+     2. MASKOT ROBOT
+     ========================================================================== */
+  var mascot = document.getElementById("robot-mascot");
+  mascot.addEventListener("click", function () {
+    mascot.style.animation = "none";
+    mascot.style.transform = "rotate(0deg) scale(1.3)";
+    window.setTimeout(function () { mascot.style.transform = ""; mascot.style.animation = ""; }, 260);
+  });
+
+  /* ==========================================================================
+     3. HERO — teks mengetik & starfield
+     ========================================================================== */
+  var typedEl = document.getElementById("typedGreeting");
+  var TYPE_PHRASES = ["Selamat datang, gw", "Welcome, I'm", "ようこそ、僕は", "欢迎，我是"];
+  function runTypewriter() {
+    var phraseIndex = 0, charIndex = 0, deleting = false;
+    function tick() {
+      var current = TYPE_PHRASES[phraseIndex];
+      if (!deleting) {
+        charIndex++;
+        typedEl.textContent = current.slice(0, charIndex);
+        if (charIndex === current.length) { deleting = true; window.setTimeout(tick, 1300); return; }
+        window.setTimeout(tick, 85);
+      } else {
+        charIndex--;
+        typedEl.textContent = current.slice(0, charIndex);
+        if (charIndex === 0) { deleting = false; phraseIndex = (phraseIndex + 1) % TYPE_PHRASES.length; window.setTimeout(tick, 350); return; }
+        window.setTimeout(tick, 40);
+      }
+    }
+    tick();
+  }
+  if (reduced) typedEl.textContent = TYPE_PHRASES[0];
+  else runTypewriter();
+
+  (function starfield() {
+    var sf = document.getElementById("starfield");
+    var sctx = sf.getContext("2d");
+    var stars = [];
+    var STAR_COUNT = 140;
+    function resize() {
+      var dpr = Math.min(window.devicePixelRatio || 1, 2);
+      sf.width = sf.parentElement.clientWidth * dpr;
+      sf.height = sf.parentElement.clientHeight * dpr;
+      if (!stars.length) {
+        for (var i = 0; i < STAR_COUNT; i++) {
+          stars.push({ x: Math.random() * sf.width, y: Math.random() * sf.height, r: Math.random() * 1.6 + 0.4, speed: Math.random() * 0.4 + 0.15, twinkle: Math.random() * Math.PI * 2 });
+        }
+      }
+    }
+    resize();
+    window.addEventListener("resize", resize);
+    function frame() {
+      if (document.hidden) { if (!reduced) requestAnimationFrame(frame); return; }
+      sctx.clearRect(0, 0, sf.width, sf.height);
+      stars.forEach(function (s) {
+        s.x -= s.speed;
+        if (s.x < -2) s.x = sf.width + 2;
+        s.twinkle += 0.02;
+        var alpha = 0.4 + Math.sin(s.twinkle) * 0.35;
+        sctx.beginPath();
+        sctx.fillStyle = "rgba(237,232,224," + Math.max(0.1, alpha) + ")";
+        sctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        sctx.fill();
+      });
+      if (!reduced) requestAnimationFrame(frame);
+    }
+    frame();
+  })();
+
+  /* ==========================================================================
+     4. HEADER — shadow saat scroll
+     ========================================================================== */
+  var header = document.getElementById("site-header");
+  var scrollScheduled = false;
+  window.addEventListener("scroll", function () {
+    if (scrollScheduled) return;
+    scrollScheduled = true;
+    requestAnimationFrame(function () {
+      scrollScheduled = false;
+      header.classList.toggle("is-scrolled", window.scrollY > 40);
+    });
+  }, { passive: true });
+
+  /* ==========================================================================
+     5. PENCARIAN
+     ========================================================================== */
+  var searchToggleBtn = document.getElementById("search-toggle");
+  var searchOverlay = document.getElementById("search-overlay");
+  var searchPanel = document.getElementById("search-panel");
+  var searchInput = document.getElementById("search-input");
+  var searchResultsEl = document.getElementById("search-results");
+  var searchIndex = [];
+  var searchFocusIdx = -1;
+
+  function rebuildSearchIndex() {
+    var t = TRANSLATIONS[currentLang];
+    searchIndex = [];
+
+    searchIndex.push({ icon: "🏠", cat: t.searchCatSection, title: t.navHero, target: "#top" });
+    searchIndex.push({ icon: "🖼️", cat: t.searchCatSection, title: t.eyebrowBackground + " — " + t.headingBackground, target: "#background" });
+    searchIndex.push({ icon: "🛠️", cat: t.searchCatSection, title: t.eyebrowSkill + " — " + t.headingSkill, target: "#skill" });
+    searchIndex.push({ icon: "🚀", cat: t.searchCatSection, title: t.eyebrowProject + " — " + t.headingProject, target: "#project" });
+
+    SKILLS.forEach(function (s) {
+      searchIndex.push({ icon: s.badge.label, cat: t.searchCatSkill, title: s.name, target: "#skill", skillKey: s.key });
+    });
+    LANGUAGES.forEach(function (l) {
+      searchIndex.push({ icon: l.flag, cat: t.searchCatLang, title: l.name, target: "#skill" });
+    });
+    (t.projects || []).forEach(function (p) {
+      searchIndex.push({ icon: "📁", cat: t.searchCatProject, title: p.title, target: "#project", href: p.link });
+    });
+  }
+  rebuildSearchIndex();
+
+  function setSearchOpen(open) {
+    searchPanel.classList.toggle("is-open", open);
+    searchOverlay.classList.toggle("is-open", open);
+    searchPanel.setAttribute("aria-hidden", open ? "false" : "true");
+    searchToggleBtn.setAttribute("aria-expanded", open ? "true" : "false");
+    if (open) {
+      window.setTimeout(function () { searchInput.focus(); }, 60);
+    } else {
+      searchInput.value = "";
+      searchFocusIdx = -1;
+      renderSearchResults([]);
+    }
+  }
+
+  function renderSearchResults(list) {
+    searchResultsEl.innerHTML = "";
+    if (!list.length) {
+      var t = TRANSLATIONS[currentLang];
+      var empty = document.createElement("div");
+      empty.className = "search-empty";
+      empty.textContent = searchInput.value.trim() ? t.searchEmpty : "";
+      searchResultsEl.appendChild(empty);
+      return;
+    }
+    list.forEach(function (item, i) {
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "search-result" + (i === searchFocusIdx ? " is-focused" : "");
+      btn.innerHTML =
+        '<span class="search-result-icon">' + item.icon + "</span>" +
+        '<span class="search-result-text"><span class="search-result-title">' + item.title + '</span><span class="search-result-meta">' + item.cat + "</span></span>";
+      btn.addEventListener("click", function () { goToSearchResult(item); });
+      searchResultsEl.appendChild(btn);
+    });
+  }
+
+  function goToSearchResult(item) {
+    setSearchOpen(false);
+    if (item.href) { window.open(item.href, "_blank", "noopener"); return; }
+    var el = document.querySelector(item.target);
+    if (el) el.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" });
+    if (item.skillKey) window.setTimeout(function () { toggleSkill(item.skillKey); }, reduced ? 0 : 500);
+  }
+
+  function runSearch() {
+    var q = searchInput.value.trim().toLowerCase();
+    searchFocusIdx = -1;
+    if (!q) { renderSearchResults([]); return; }
+    var matches = searchIndex.filter(function (item) {
+      return item.title.toLowerCase().indexOf(q) !== -1 || item.cat.toLowerCase().indexOf(q) !== -1;
+    }).slice(0, 8);
+    renderSearchResults(matches);
+  }
+
+  searchToggleBtn.addEventListener("click", function () {
+    setSearchOpen(!searchPanel.classList.contains("is-open"));
+  });
+  searchOverlay.addEventListener("click", function () { setSearchOpen(false); });
+  searchInput.addEventListener("input", runSearch);
+  searchInput.addEventListener("keydown", function (e) {
+    var items = Array.prototype.slice.call(searchResultsEl.querySelectorAll(".search-result"));
+    if (e.key === "ArrowDown" && items.length) {
+      e.preventDefault();
+      searchFocusIdx = (searchFocusIdx + 1) % items.length;
+      items.forEach(function (el, i) { el.classList.toggle("is-focused", i === searchFocusIdx); });
+    } else if (e.key === "ArrowUp" && items.length) {
+      e.preventDefault();
+      searchFocusIdx = (searchFocusIdx - 1 + items.length) % items.length;
+      items.forEach(function (el, i) { el.classList.toggle("is-focused", i === searchFocusIdx); });
+    } else if (e.key === "Enter" && items.length) {
+      e.preventDefault();
+      items[searchFocusIdx >= 0 ? searchFocusIdx : 0].click();
+    }
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") setSearchOpen(false);
+    if ((e.key === "/" || (e.key.toLowerCase() === "k" && (e.metaKey || e.ctrlKey))) && document.activeElement !== searchInput) {
+      var tag = document.activeElement && document.activeElement.tagName;
+      if (tag !== "INPUT" && tag !== "TEXTAREA") { e.preventDefault(); setSearchOpen(true); }
+    }
+  });
+
+  /* ==========================================================================
+     6. MENU HAMBURGER
+     ========================================================================== */
+  var hamburgerBtn = document.getElementById("hamburger-btn");
+  var panel = document.getElementById("hamburger-panel");
+  var overlay = document.getElementById("panel-overlay");
+  function openPanel() {
+    panel.classList.add("is-open");
+    overlay.classList.add("is-open");
+    hamburgerBtn.classList.add("hamburger-btn-active");
+    hamburgerBtn.setAttribute("aria-expanded", "true");
+    panel.setAttribute("aria-hidden", "false");
+  }
+  function closePanel() {
+    panel.classList.remove("is-open");
+    overlay.classList.remove("is-open");
+    hamburgerBtn.classList.remove("hamburger-btn-active");
+    hamburgerBtn.setAttribute("aria-expanded", "false");
+    panel.setAttribute("aria-hidden", "true");
+  }
+  hamburgerBtn.addEventListener("click", function () {
+    panel.classList.contains("is-open") ? closePanel() : openPanel();
+  });
+  overlay.addEventListener("click", closePanel);
+  panel.querySelectorAll("[data-close-panel]").forEach(function (l) { l.addEventListener("click", closePanel); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") closePanel(); });
+
+  /* ==========================================================================
+     7. SLIDESHOW KENANGAN
+     ========================================================================== */
+  var slides = Array.prototype.slice.call(document.querySelectorAll(".memory-slide"));
+  var dotsWrap = document.getElementById("slideshow-dots");
+  var slideIndex = 0;
+  slides.forEach(function (_, i) {
+    var dot = document.createElement("span");
+    if (i === 0) dot.classList.add("is-active");
+    dotsWrap.appendChild(dot);
+  });
+  var dots = Array.prototype.slice.call(dotsWrap.children);
+  function showSlide(i) {
+    slides[slideIndex].classList.remove("is-active");
+    dots[slideIndex].classList.remove("is-active");
+    slideIndex = i % slides.length;
+    slides[slideIndex].classList.add("is-active");
+    dots[slideIndex].classList.add("is-active");
+  }
+  if (slides.length > 1 && !reduced) {
+    window.setInterval(function () { showSlide(slideIndex + 1); }, 4500);
+  }
+
+  /* ==========================================================================
+     8. KARTU BIO GANTUNG — fisika lanyard
+     ----------------------------------------------------------------------------
+     PENTING: tali cuma bisa MENARIK saat teregang, TIDAK PERNAH mendorong
+     saat kendur — kalau kebalik, kartu mental jauh ke atas lalu hilang kena
+     overflow:hidden (bug lama, sudah diperbaiki).
+     ========================================================================== */
+  var stage = document.getElementById("bioCardStage");
+  var dragWrapper = document.getElementById("bioDragWrapper");
+  var card3d = document.getElementById("bioCard3d");
+  var strapPath = document.getElementById("bioStrapPath");
+
+  var REST_LENGTH = 130;
+  var SPRING_K = 0.08;
+  var GRAVITY = 0.7;
+  var DAMPING = 0.9;
+  var CARD_WIDTH = 220;
+
+  var anchorX = 150;
+  var anchorY = -8;
+  var pos = { x: anchorX, y: anchorY - 260 };
+  var vel = { x: 0, y: 0 };
+  var rotationAngle = 0;
+  var isDragging = false;
+  var dragOffsetX = 0, dragOffsetY = 0;
+  var clickStartX = 0, clickStartY = 0, timeDown = 0;
+  var flipTimeout = null;
+  var physicsStarted = false;
+  var physicsSettled = false;
+
+  function measureStage() {
+    var r = stage.getBoundingClientRect();
+    anchorX = r.width / 2;
+  }
+  measureStage();
+  window.addEventListener("resize", measureStage);
+
+  function handleAutoFlip() {
+    if (flipTimeout) clearTimeout(flipTimeout);
+    if (card3d.classList.contains("is-flipped")) {
+      flipTimeout = setTimeout(function () { card3d.classList.remove("is-flipped"); }, 4000);
+    }
+  }
+
+  function updatePhysics() {
+    var dx = pos.x - anchorX;
+    var dy = pos.y - anchorY;
+    var dist = Math.sqrt(dx * dx + dy * dy);
+
+    if (!isDragging) {
+      if (dist > 0.1) {
+        var springForce = Math.max(0, dist - REST_LENGTH) * SPRING_K;
+        var nx = dx / dist, ny = dy / dist;
+        vel.x -= nx * springForce;
+        vel.y -= ny * springForce;
+      }
+      vel.y += GRAVITY;
+      vel.x *= DAMPING;
+      vel.y *= DAMPING;
+      pos.x += vel.x;
+      pos.y += vel.y;
+    }
+
+    var targetRotation = Math.atan2(dy, dx) * (180 / Math.PI) - 90;
+    var velTilt = vel.x * 1.5;
+    if (isDragging) rotationAngle += (targetRotation - rotationAngle) * 0.4;
+    else rotationAngle += (targetRotation + velTilt - rotationAngle) * 0.12;
+
+    var slack = Math.max(0, REST_LENGTH - dist);
+    var cp1X = anchorX + (pos.x - anchorX) * 0.2;
+    var cp1Y = anchorY + (pos.y - anchorY) * 0.5 + slack * 0.8;
+    var cp2X = pos.x - vel.x * 3;
+    var cp2Y = pos.y - 30 + slack * 0.4;
+
+    dragWrapper.style.transform = "translate(" + (pos.x - CARD_WIDTH / 2) + "px, " + pos.y + "px) rotate(" + rotationAngle + "deg)";
+    strapPath.setAttribute("d", "M " + anchorX + " " + anchorY + " C " + cp1X + " " + cp1Y + ", " + cp2X + " " + cp2Y + ", " + pos.x + " " + pos.y);
+
+    var speed = Math.abs(vel.x) + Math.abs(vel.y);
+    if (!isDragging && speed < 0.02 && dist < REST_LENGTH + 2) { physicsSettled = true; return; }
+    physicsSettled = false;
+    requestAnimationFrame(updatePhysics);
+  }
+
+  function wakePhysics() {
+    if (physicsSettled) { physicsSettled = false; requestAnimationFrame(updatePhysics); }
+  }
+
+  function startPhysics() {
+    if (physicsStarted) return;
+    physicsStarted = true;
+    measureStage();
+    pos.x = anchorX;
+    if (reduced) pos.y = anchorY + REST_LENGTH + 60;
+    stage.classList.add("is-armed");
+    updatePhysics();
+  }
+
+  function localPoint(clientX, clientY) {
+    var rect = stage.getBoundingClientRect();
+    return { x: clientX - rect.left, y: clientY - rect.top };
+  }
+  function onPointerDown(e) {
+    isDragging = true;
+    wakePhysics();
+    var clientX = e.clientX != null ? e.clientX : e.touches[0].clientX;
+    var clientY = e.clientY != null ? e.clientY : e.touches[0].clientY;
+    var p = localPoint(clientX, clientY);
+    dragOffsetX = p.x - pos.x;
+    dragOffsetY = p.y - pos.y;
+    clickStartX = p.x; clickStartY = p.y; timeDown = performance.now();
+    vel = { x: 0, y: 0 };
+    if (flipTimeout) clearTimeout(flipTimeout);
+  }
+  function onPointerMove(e) {
+    if (!isDragging) return;
+    var clientX = e.clientX != null ? e.clientX : (e.touches && e.touches[0].clientX);
+    var clientY = e.clientY != null ? e.clientY : (e.touches && e.touches[0].clientY);
+    if (clientX == null) return;
+    var p = localPoint(clientX, clientY);
+    pos.x = p.x - dragOffsetX;
+    pos.y = p.y - dragOffsetY;
+  }
+  function onPointerUp(e) {
+    if (!isDragging) return;
+    isDragging = false;
+    var clientX = e.clientX != null ? e.clientX : (e.changedTouches && e.changedTouches[0].clientX);
+    var clientY = e.clientY != null ? e.clientY : (e.changedTouches && e.changedTouches[0].clientY);
+    var p = localPoint(clientX, clientY);
+    var moveDist = Math.abs(p.x - clickStartX) + Math.abs(p.y - clickStartY);
+    var duration = performance.now() - timeDown;
+    if (moveDist < 30 || (duration < 250 && moveDist < 60)) card3d.classList.toggle("is-flipped");
+    handleAutoFlip();
+  }
+  dragWrapper.addEventListener("mousedown", onPointerDown);
+  window.addEventListener("mousemove", onPointerMove);
+  window.addEventListener("mouseup", onPointerUp);
+  dragWrapper.addEventListener("touchstart", onPointerDown, { passive: true });
+  window.addEventListener("touchmove", onPointerMove, { passive: true });
+  window.addEventListener("touchend", onPointerUp);
+
+  if ("IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) { if (entry.isIntersecting) { startPhysics(); io.disconnect(); } });
+    }, { threshold: 0.25 });
+    io.observe(stage);
+  } else {
+    startPhysics();
+  }
+
+  /* ==========================================================================
+     9. MARQUEE SKILL
+     ========================================================================== */
+  function buildChartSVG(trend) {
+    var max = Math.max.apply(null, trend), min = Math.min.apply(null, trend);
+    var range = Math.max(1, max - min);
+    var padX = 4, padY = 8, W = 100, H = 56;
+    var pts = trend.map(function (v, i) {
+      var x = padX + (i / (trend.length - 1)) * (W - padX * 2);
+      var y = H - padY - ((v - min) / range) * (H - padY * 2);
+      return [x, y];
+    });
+    var d = "M" + pts[0][0] + "," + pts[0][1];
+    for (var i = 0; i < pts.length - 1; i++) {
+      var p0 = pts[i - 1] || pts[i], p1 = pts[i], p2 = pts[i + 1], p3 = pts[i + 2] || p2;
+      var c1x = p1[0] + (p2[0] - p0[0]) / 6, c1y = p1[1] + (p2[1] - p0[1]) / 6;
+      var c2x = p2[0] - (p3[0] - p1[0]) / 6, c2y = p2[1] - (p3[1] - p1[1]) / 6;
+      d += " C" + c1x + "," + c1y + " " + c2x + "," + c2y + " " + p2[0] + "," + p2[1];
+    }
+    var areaD = d + " L" + pts[pts.length - 1][0] + "," + H + " L" + pts[0][0] + "," + H + " Z";
+    var dots2 = pts.map(function (p) { return '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="2.4" style="fill:var(--accent)" />'; }).join("");
+    var uid = "sg" + Math.random().toString(36).slice(2, 8);
+    return (
+      '<svg class="skill-chart" viewBox="0 0 100 56" preserveAspectRatio="none">' +
+      '<defs><linearGradient id="' + uid + '" x1="0" y1="0" x2="0" y2="1">' +
+      '<stop offset="0%" style="stop-color:var(--accent)" stop-opacity="0.35" />' +
+      '<stop offset="100%" style="stop-color:var(--accent)" stop-opacity="0" />' +
+      "</linearGradient></defs>" +
+      '<path d="' + areaD + '" fill="url(#' + uid + ')" stroke="none" />' +
+      '<path d="' + d + '" fill="none" style="stroke:var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />' +
+      dots2 + "</svg>"
+    );
+  }
+  function buildSkillCard(skill) {
+    var el = document.createElement("div");
+    el.className = "skill-card";
+    el.dataset.skill = skill.key;
+    el.innerHTML =
+      "<h3>" + skill.name + "</h3>" +
+      '<div class="skill-progress-track"><div class="skill-progress-fill" style="width:' + skill.level + '%"></div></div>' +
+      '<span class="skill-progress-label" data-level="' + skill.level + '">' + TRANSLATIONS[currentLang].skillLevelLabel + " — " + skill.level + "%</span>" +
+      buildChartSVG(skill.trend);
+    return el;
+  }
+
+  var track = document.getElementById("skill-track");
+  var marqueeWrap = document.getElementById("skill-marquee-wrap");
+  var iconRowFrontend = document.getElementById("skill-icon-row-frontend");
+  var iconRowBackend = document.getElementById("skill-icon-row-backend");
+  var REPEATS = 3;
+  var allCards = [];
+
+  for (var r = 0; r < REPEATS; r++) {
+    SKILLS.forEach(function (skill) {
+      var el = buildSkillCard(skill);
+      track.appendChild(el);
+      allCards.push({ el: el, key: skill.key });
+    });
+  }
+
+  function wireIconPress(btn) {
+    function press() { btn.classList.add("is-pressed"); }
+    function release() { btn.classList.remove("is-pressed"); }
+    btn.addEventListener("mousedown", press);
+    btn.addEventListener("mouseup", release);
+    btn.addEventListener("mouseleave", release);
+    btn.addEventListener("touchstart", press, { passive: true });
+    btn.addEventListener("touchend", release);
+    btn.addEventListener("touchcancel", release);
+  }
+
+  SKILLS.forEach(function (skill) {
+    var btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "skill-icon";
+    btn.dataset.skill = skill.key;
+    btn.innerHTML = '<span class="skill-icon-logo" style="background:' + skill.badge.bg + ";color:" + skill.badge.fg + '">' + skill.badge.label + "</span><span>" + skill.name + "</span>";
+    (skill.category === "frontend" ? iconRowFrontend : iconRowBackend).appendChild(btn);
+    wireIconPress(btn);
+    btn.addEventListener("click", function () { toggleSkill(skill.key); });
+  });
+
+  var setWidth = 0;
+  function measureSetWidth() {
+    if (allCards.length > SKILLS.length) setWidth = allCards[SKILLS.length].el.offsetLeft - allCards[0].el.offsetLeft;
+  }
+  measureSetWidth();
+  window.addEventListener("resize", measureSetWidth);
+
+  var pos2 = 0, playing = !reduced, activeSkill = null, lastTs = null, SPEED = 34;
+  function applyTransform() { track.style.transform = "translateX(" + pos2.toFixed(1) + "px)"; }
+  function wrapPos() {
+    if (!setWidth) return;
+    var lower = -3 * setWidth, upper = -2 * setWidth;
+    while (pos2 < lower) pos2 += setWidth;
+    while (pos2 > upper) pos2 -= setWidth;
+  }
+  function tick(ts) {
+    if (lastTs === null) lastTs = ts;
+    var dt = (ts - lastTs) / 1000;
+    lastTs = ts;
+    if (playing && setWidth) { pos2 -= SPEED * dt; wrapPos(); applyTransform(); }
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+
+  function setActiveSkill(key) {
+    document.querySelectorAll(".skill-icon").forEach(function (b) { b.classList.toggle("is-active", b.dataset.skill === key); });
+    allCards.forEach(function (c) { c.el.classList.toggle("is-highlighted", c.key === key); });
+  }
+  function centerOnSkill(key) {
+    if (!setWidth) measureSetWidth();
+    var wrapWidth = marqueeWrap.getBoundingClientRect().width;
+    var viewportCenter = wrapWidth / 2;
+    var best = null, bestDelta = Infinity;
+    allCards.forEach(function (c) {
+      if (c.key !== key) return;
+      var cardCenter = c.el.offsetLeft + c.el.offsetWidth / 2;
+      var target = viewportCenter - cardCenter;
+      var delta = Math.abs(target - pos2);
+      if (delta < bestDelta) { bestDelta = delta; best = target; }
+    });
+    if (best === null) return;
+    track.classList.add("is-centering");
+    pos2 = best;
+    applyTransform();
+    window.setTimeout(function () { track.classList.remove("is-centering"); }, 650);
+  }
+  function toggleSkill(key) {
+    if (activeSkill === key) { activeSkill = null; playing = !reduced; setActiveSkill(null); }
+    else { activeSkill = key; playing = false; centerOnSkill(key); setActiveSkill(key); }
+  }
+  allCards.forEach(function (c) { c.el.addEventListener("click", function () { toggleSkill(c.key); }); });
+  marqueeWrap.addEventListener("mouseenter", function () { if (!activeSkill) playing = false; });
+  marqueeWrap.addEventListener("mouseleave", function () { if (!activeSkill) playing = !reduced; });
+
+  /* ==========================================================================
+     10. RENDER PROJECT, BAHASA, SERTIFIKAT, BIDANG, IKON KONTAK HERO
+     ========================================================================== */
+  function renderProjects(projects, linkLabel) {
+    var grid = document.getElementById("project-grid");
+    if (!grid) return;
+    grid.innerHTML = "";
+    projects.forEach(function (p) {
+      var el = document.createElement("div");
+      el.className = "project-card reveal-up";
+      el.innerHTML = "<h3>" + p.title + "</h3><p>" + p.desc + "</p>" +
+        '<a href="' + p.link + '" target="_blank" rel="noopener">' + linkLabel + "</a>";
+      grid.appendChild(el);
+      observeReveal(el);
+    });
+  }
+  function renderCerts(emptyText) {
+    var list = document.getElementById("certList");
+    if (!list) return;
+    list.innerHTML = "";
+    if (!CERTS.length) { list.innerHTML = '<div class="empty-state">' + emptyText + "</div>"; return; }
+    CERTS.forEach(function (c) {
+      var el = document.createElement("div");
+      el.className = "cert-item reveal-up";
+      el.innerHTML = '<span class="cert-icon">' + c.icon + '</span><span><span class="cert-name">' + c.name + '</span><br/><span class="cert-issuer">' + c.issuer + "</span></span>";
+      list.appendChild(el);
+      observeReveal(el);
+    });
+  }
+  function renderFields(emptyText) {
+    var row = document.getElementById("fieldChipRow");
+    if (!row) return;
+    row.innerHTML = "";
+    if (!FIELDS.length) { row.innerHTML = '<div class="empty-state">' + emptyText + "</div>"; return; }
+    FIELDS.forEach(function (f) {
+      var el = document.createElement("span");
+      el.className = "field-chip reveal-up";
+      el.textContent = f;
+      row.appendChild(el);
+      observeReveal(el);
+    });
+  }
+
+  var heroContactIcons = document.getElementById("heroContactIcons");
+  CONTACTS.forEach(function (c) {
+    var a = document.createElement("a");
+    a.className = "hero-contact-icon";
+    a.href = c.href; a.target = "_blank"; a.rel = "noopener";
+    a.textContent = c.icon;
+    a.title = c.label;
+    a.setAttribute("aria-label", c.label);
+    heroContactIcons.appendChild(a);
+  });
+
+  var langGrid = document.getElementById("langSkillGrid");
+  LANGUAGES.forEach(function (l) {
+    var el = document.createElement("div");
+    el.className = "lang-skill-card reveal-up";
+    var levelText = l.levelLabel ? l.levelLabel : l.levelPercent + "%";
+    el.innerHTML =
+      '<div class="lang-skill-top"><span class="lang-skill-flag">' + l.flag + '</span><span class="lang-skill-name">' + l.name + "</span></div>" +
+      '<div class="skill-progress-track"><div class="skill-progress-fill" style="width:' + l.levelPercent + '%"></div></div>' +
+      '<span class="lang-skill-level">' + levelText + "</span>";
+    langGrid.appendChild(el);
+    observeReveal(el);
+  });
+
+  /* ==========================================================================
+     11. REVEAL ON SCROLL
+     ========================================================================== */
+  var revealObserver = "IntersectionObserver" in window
+    ? new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            revealObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.15 })
+    : null;
+  function observeReveal(el) {
+    if (revealObserver) revealObserver.observe(el);
+    else el.classList.add("is-visible");
+  }
+  document.querySelectorAll(".reveal-up, .reveal-left, .reveal-right").forEach(observeReveal);
+
+  initLanguage();
+})();
+
+</script>
+</body>
+</html>
